@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        nav {
+            padding: 15px 0;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            transition: 0.3s;
+        }
+
+        h1 {
+            margin-left: 20px;
+        }
+
+        #diagnosis-container {
+            width: 100%;
+            margin: 0 auto;
+            background-position: center;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 10px 10%;
+            overflow: hidden;
+        }
+
+        #diagnosis-box {
+            border: 4px solid #4573ab;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 20px;
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        .animated-text {
+            display: inline-block;
+            white-space: break-spaces;
+            overflow: hidden;
+            animation: typing 5s steps(100);
+        }
+
+        #download-button {
+            display:none;
+            margin-top: 20px;
+            font-size: 18px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="diagnosis-container">
+    <nav>
+        <img src="static/logo.png" class="logo">
+    </nav>
+    <h1>Diagnosis Report</h1>
+    <div id="diagnosis-box">
+        <span class="animated-text"></span>
+    </div>
+    <button id="download-button" onclick="downloadReport()">Download Report</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const textElement = document.querySelector('.animated-text');
+        const downloadButton = document.getElementById('download-button');
+        const textContent = `{{data}}`;
+
+        function typeText(index) {
+            textElement.innerText = textContent.slice(0, index);
+            textElement.scrollIntoView({ behavior: 'smooth', block: 'end' }); // Scroll into view
+
+            if (index === textContent.length) {
+                // Show the download button when the typing animation is complete
+                downloadButton.style.display = 'inline-block';
+            }
+
+            if (index < textContent.length) {
+                setTimeout(function () {
+                    typeText(index + 1);
+                }, 5); // Adjust the delay (50ms) for the desired typing speed
+            }
+        }
+
+        typeText(0);
+    });
+
+    function downloadReport() {
+        const textContent = `{{data}}`;
+        const blob = new Blob([textContent], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'diagnosis_report.txt';
+        a.click();
+    }
+</script>
+
+</body>
+</html>
